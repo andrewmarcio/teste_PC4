@@ -26,8 +26,8 @@ class SchoolFactory extends Factory
             "name" => "School ". $this->faker->name(),
             "address" => "Street". $this->faker->name(),
             "neighborhood" => $this->faker->name(),
-            "number" => rand(3),
-            "zip" => rand(8)
+            "number" => rand(1, 999),
+            "zip" => rand(10000000, 99999999)
         ];
     }
 }

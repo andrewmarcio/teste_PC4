@@ -18,6 +18,11 @@ class School extends Model
         "zip"
     ];
 
+    protected $casts = [
+        "created_at" => "datetime:d/m/Y H:i:s",
+        "updated_at" => "datetime:d/m/Y H:i:s",
+    ];
+
     public function classes()
     {
         return $this->hasMany(Classe::class, "school_id");

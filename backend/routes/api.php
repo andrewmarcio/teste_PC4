@@ -28,6 +28,8 @@ Route::middleware("auth:api")->group(function(){
     });
 
     Route::resource("schools", SchoolController::class);
+    Route::get("schools/search", [SchoolController::class, "search"]);
+    
     Route::resource("students", StudentController::class);
     Route::resource("classes", ClasseController::class);
 });

@@ -5,16 +5,18 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    authenticated: false
+    authenticated: false,
   },
   mutations: {
-    SET_AUTH: (state, auth) => state.authenticated = auth
+    SET_AUTH: (state, auth) => (state.authenticated = auth),
   },
   actions: {
-    setAuth({commit}, auth){ commit('SET_AUTH', auth) }
+    setAuth({ commit }, auth) {
+      commit("SET_AUTH", auth);
+    },
   },
   modules: {},
   getters: {
-    isAuthenticated: state => state.authenticated
-  }
+    isAuthenticated: (state) => state.authenticated,
+  },
 });

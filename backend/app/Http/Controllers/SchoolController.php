@@ -9,6 +9,19 @@ use Illuminate\Http\Request;
 
 class SchoolController extends Controller
 {
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function search(Request $request)
+    {
+        $query = School::query();
+        $query->where("name", "LIKE", "%".$request->input("search")."%");
+        return $query->paginate(10);
+    }
+
     /**
      * Display a listing of the resource.
      *

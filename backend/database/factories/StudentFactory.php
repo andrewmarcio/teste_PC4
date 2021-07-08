@@ -24,7 +24,7 @@ class StudentFactory extends Factory
     {
         return [
             "name" => $this->faker->name(),
-            "phone" => $this->faker->phoneNumber(),
+            "phone" => str_pad(rand(1,99), 2, "0", STR_PAD_LEFT)."9".rand(1000,9999).rand(1000,9999),
             "email" => $this->faker->safeEmail(),
             "birthday" => Carbon::now()->subDays(rand(1, 365) * rand(1, 18)),
             "gender" => ["M", "F"][rand(0, 1)]

@@ -17,6 +17,8 @@ class Classe extends Model
         "turn"
     ];
 
+    protected $with = ["level"];
+
     public function students()
     {
         return $this->belongsToMany(
@@ -30,5 +32,10 @@ class Classe extends Model
     public function school()
     {
         return $this->belongsTo(School::class, "school_id");
+    }
+
+    public function level()
+    {
+        return $this->belongsTo(EducationalLevel::class, "nivel_id");
     }
 }

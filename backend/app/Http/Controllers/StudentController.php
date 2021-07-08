@@ -26,7 +26,8 @@ class StudentController extends Controller
      */
     public function store(StudentRequest $request)
     {
-        Student::create($request->all());
+        $student = Student::create($request->all());
+        $student->classes()->sync($request->input("class_id"));
 
         return response()->json(["message" => "Added Student Successfully."], 200);
     }
@@ -52,6 +53,7 @@ class StudentController extends Controller
     public function update(StudentRequest $request, Student $student)
     {
         $student->update($request->all());
+        $student->classes()->sync($request->input("class_id"));
 
         return response()->json(["message" => "Updated Student Successfuly."], 200);
     }

@@ -24,6 +24,7 @@ class StudentRequest extends FormRequest
     public function rules()
     {
         return [
+            "class_id" => "required|array",
             "name" => "required|string",
             "phone" => "nullable|string",
             "email" => "required|string|email",

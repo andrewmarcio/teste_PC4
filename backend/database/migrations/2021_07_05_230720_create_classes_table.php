@@ -16,9 +16,9 @@ class CreateClassesTable extends Migration
         Schema::create('classes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("school_id");
-            $table->integer("year");
+            $table->string("year", 4);
             $table->unsignedBigInteger('nivel_id');
-            $table->string("serie");
+            $table->string("serie", 10);
             $table->char("turn", 1);
             $table->timestamps();
             

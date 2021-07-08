@@ -17,7 +17,6 @@ class CreateSchoolsTable extends Migration
             $table->id();
             $table->string("name");
             $table->string("address");
-            $table->string("street");
             $table->string("neighborhood");
             $table->string("number");
             $table->string("zip");

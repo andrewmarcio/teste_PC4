@@ -17,6 +17,8 @@ class Student extends Model
         "gender"
     ];
 
+    protected $with = ["classes"];
+
     public function classes()
     {
         return $this->belongsToMany(

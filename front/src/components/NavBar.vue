@@ -5,7 +5,7 @@
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
-      <b-collapse id="nav-collapse" is-nav>
+      <b-collapse id="nav-collapse" is-nav v-if="auth">
         
         <b-navbar-nav>
           <b-nav-item>
@@ -35,8 +35,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-
+// import { mapState } from "vuex";
 export default {
   name: "NavBar",
   methods: {
@@ -46,12 +45,13 @@ export default {
       this.$router.push("/login");
     },
   },
-  data() {
-    const auth = mapState({ authenticated: (state) => state.authenticated });
-
-    return {
-      auth,
-    };
+  props() {
+    return ["authorized"];
   },
+  data(){
+    return {
+      auth: this.$attrs.authorized
+    }
+  }
 };
 </script>

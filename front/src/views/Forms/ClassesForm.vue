@@ -14,7 +14,7 @@
                                 id="school_id"
                                 label-for="input-school_id"
                             >
-                                <b-form-select v-model="selected_school" :options="schools"></b-form-select>
+                                <b-form-select v-model="formData.school_id" :options="schools"></b-form-select>
                                 <div v-if="errors.school_id">
                                     {{errors.school_id}}
                                 </div>
@@ -23,34 +23,34 @@
                                 id="address"
                                 label-for="input-address"
                             >
-                                <b-form-select v-model="selected_level" :options="levels"></b-form-select>
+                                <b-form-select v-model="formData.nivel_id" :options="levels"></b-form-select>
                                 <div v-if="errors.nivel_id">
                                     {{errors.nivel_id}}
-                                </div>
-                            </b-form-group>
-                            <b-form-group
-                                id="serie"
-                                label-for="input-serie"
-                            >
-                                <b-form-input id="input-serie" v-model="school.serie" trim placeholder="Class serie"></b-form-input>
-                                <div v-if="errors.serie">
-                                    {{errors.serie}}
                                 </div>
                             </b-form-group>
                             <b-form-group
                                 id="turn"
                                 label-for="input-turn"
                             >
-                                <b-form-input id="input-turn" v-model="school.turn" trim placeholder="Class turn"></b-form-input>
+                                <b-form-select v-model="formData.turn" :options="turns"></b-form-select>
                                 <div v-if="errors.turn">
                                     {{errors.turn}}
+                                </div>
+                            </b-form-group>
+                            <b-form-group
+                                id="serie"
+                                label-for="input-serie"
+                            >
+                                <b-form-input id="input-serie" v-model="formData.serie" trim placeholder="Class serie"></b-form-input>
+                                <div v-if="errors.serie">
+                                    {{errors.serie}}
                                 </div>
                             </b-form-group>
                             <b-form-group
                                 id="year"
                                 label-for="input-year"
                             >
-                                <b-form-input id="input-year" v-model="school.year" trim placeholder="Class year"></b-form-input>
+                                <b-form-input id="input-year" v-model="formData.year" trim placeholder="Class year"></b-form-input>
                                 <div v-if="errors.year">
                                     {{errors.year}}
                                 </div>
@@ -74,54 +74,66 @@ import {defaultHeaders, mapErrors} from "../../util/constants";
 export default {
     name: "ClassesForm",
     data(){
-        this.getData()
+
+        let schools = [{value:null, text:"Select a school"}];
+        let levels = [{value:null, text:"Select an Educational Level"}];
+        let turns = [{value:null, text:"Select a turn"}, {value: "M", text: "Morning"}, {value: "T", text: "Afternoon"}, {value: "N", text: "Night"}];
+
+        this.getData((error, data) => {
+            if(error)
+            {
+                this.$toast.error(
+                    "Ocorreram erros, verifique sua conexão com a internet!"
+                );
+                return
+            }
+
+            data.schools.map(school => {
+                schools.push({ value: school.id, text: school.name});
+            });
+
+            data.levels.map(level => {
+                levels.push({ value: level.id, text: level.description});
+            });
+        })
         return {
-            schools: [{value:null, text:"Select a school"}],
-            levels: [{value:null, text:"Select an Educational Level"}],
-            selected_school: null,
-            selected_nivel: null,
-            formData: {},
+            schools,
+            levels,
+            turns,
+            formData: {
+                school_id: null,
+                nivel_id: null,
+                turn: null,
+            },
             errors: {},
-            school: {},
         }
     },
-    mounted(){
-        // this.getData()
-    },
     methods: {
-        getData(){
+        getData(callback){
             const config = {
                 headers: defaultHeaders()
             }
 
             api.get("api/classes/create", config)
                 .then(response => {
-                    this.schools = response.data.schools.map(school => {
-                        return { value: school.id, text: school.name};
-                    });
-
-                    this.levels = response.data.levels.map(level => {
-                        return { value: level.id, text: level.description};
-                    });
+                    callback(undefined, response.data)
                 })
-                .catch(() => {
-                    this.$toast.error(
-                        "Ocorreram erros, verifique sua conexão com a internet!"
-                    );
+                .catch(error => {
+                    callback(error, undefined)
                 })
         },
         store(){
             const config = {
                 headers: defaultHeaders()
             }
-            const params = this.school
+            const params = this.formData
 
-            api.post("api/schools", params, config)
+            api.post("api/classes", params, config)
                 .then(response => {
                     this.$toast.success(
                         response.data.message
                     );
-                    this.$router.push('/schools')
+                    this.$router.push('/classes')
                 })
                 .catch(error => {
                     this.errors = mapErrors(error) 

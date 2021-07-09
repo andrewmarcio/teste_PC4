@@ -17,6 +17,10 @@ class Student extends Model
         "gender"
     ];
 
+    protected $casts = [
+        "birthday" => "date:d/m/Y"
+    ];
+
     protected $with = ["classes"];
 
     public function classes()

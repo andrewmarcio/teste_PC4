@@ -55,7 +55,7 @@ export default {
           localStorage.setItem("token", access_token);
           this.$toast.success("Login efetuado com sucesso!");
 
-          // this.$store.dispatch('setAuth', true);
+          this.$store.dispatch('setAuth', true);
           this.$router.push("/");
         })
         .catch((error) => {

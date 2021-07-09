@@ -24,8 +24,8 @@ class ClasseRequest extends FormRequest
     public function rules()
     {
         return [
-            "school_id" => "required|number|exists:schools,id",
-            "nivel_id" => "required|number|exists:educational_levels,id",
+            "school_id" => "required|exists:schools,id",
+            "nivel_id" => "required|exists:educational_levels,id",
             "year" => "required|date_format:Y",
             "serie" => "required|string",
             "turn" => "required|string"

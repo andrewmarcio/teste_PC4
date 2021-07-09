@@ -12,6 +12,8 @@ class Classe extends Model
     protected $table = "classes";
 
     protected $fillable = [
+        "school_id",
+        "nivel_id",
         "year",
         "serie",
         "turn"

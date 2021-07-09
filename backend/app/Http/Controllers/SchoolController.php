@@ -19,7 +19,6 @@ class SchoolController extends Controller
     {
         $query = School::where("name", "LIKE", "%".$request->input("keyword")."%");
         return $query->paginate(10);
-        // return $query->paginate(10);
     }
 
     /**

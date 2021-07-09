@@ -13,7 +13,7 @@
                       <h3 class="mb-0 ml-3 text-left">Students</h3>
                     </b-col>
                     <b-col class="text-right">
-                      <b-button> <font-awesome-icon icon="plus" /> Add Student</b-button>
+                      <b-button to="/students/create"> <font-awesome-icon icon="plus" /> Add Student</b-button>
                     </b-col>
                   </b-row>
                 </template>
@@ -100,6 +100,7 @@ export default {
         {key: "name", label: "Name"},
         {key: "email", label: "Email"},
         "phone",
+        "birthday",
         "gender",
         "actions"
       ],

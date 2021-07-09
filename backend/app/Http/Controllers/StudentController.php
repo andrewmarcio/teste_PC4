@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StudentRequest;
+use App\Models\Classe;
 use App\Models\Student;
 use Illuminate\Http\Request;
 
@@ -18,6 +19,13 @@ class StudentController extends Controller
         $query->where($filter, "LIKE", "%".$text."%");
 
         return $query->paginate(10);
+    }
+
+    public function create()
+    {
+        return [
+            "classes" => Classe::all()
+        ];
     }
 
     /**
@@ -41,7 +49,7 @@ class StudentController extends Controller
         $student = Student::create($request->all());
         $student->classes()->sync($request->input("class_id"));
 
-        return response()->json(["message" => "Added Student Successfully."], 200);
+        return response()->json(["message" => "Added Student Successfully."], 201);
     }
 
     /**
@@ -67,7 +75,7 @@ class StudentController extends Controller
         $student->update($request->all());
         $student->classes()->sync($request->input("class_id"));
 
-        return response()->json(["message" => "Updated Student Successfuly."], 200);
+        return response()->json(["message" => "Updated Student Successfuly."], 204);
     }
 
     /**
@@ -79,6 +87,6 @@ class StudentController extends Controller
     public function destroy(Student $student)
     {
         $student->delete();
-        return response()->json(["message" => "Deleted Student."]);
+        return response()->json(["message" => "Deleted Student."], 200);
     }
 }

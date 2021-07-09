@@ -45,11 +45,9 @@
                   <template #cell(actions)>
                     <b-button-group>
                       <b-button size="sm" variant="warning">
-                        
                         <font-awesome-icon icon="edit" />
                       </b-button>
                       <b-button size="sm" variant="danger">
-                        
                         <font-awesome-icon icon="trash" />
                       </b-button>
                     </b-button-group>

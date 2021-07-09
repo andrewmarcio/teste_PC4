@@ -6,3 +6,11 @@ export function defaultHeaders() {
     Accept: "application/json",
   };
 }
+
+export function mapErrors(error) {
+  var errorData = error.response.data.errors
+  return Object.keys(errorData).reduce((previous, key) => {
+    previous[key] = errorData[key][0]
+    return previous
+  }, {})
+}

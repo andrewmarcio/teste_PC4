@@ -8,6 +8,18 @@ use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
+
+    public function search(Request $request)
+    {
+        $query = Student::query();
+        $filter = $request->input("filter");
+        $text = $request->input("keyword");
+        
+        $query->where($filter, "LIKE", "%".$text."%");
+
+        return $query->paginate(10);
+    }
+
     /**
      * Display a listing of the resource.
      *

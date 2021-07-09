@@ -10,23 +10,32 @@
                 <template #header>
                   <b-row>
                     <b-col>
-                      <h3 class="mb-0 ml-3 text-left">Schools</h3>
+                      <h3 class="mb-0 ml-3 text-left">Classes</h3>
                     </b-col>
                     <b-col class="text-right">
-                      <b-button to="/school/create"> <font-awesome-icon icon="plus" /> Add School</b-button>
+                      <b-button to="/classes/create"> <font-awesome-icon icon="plus" /> Add Class</b-button>
                     </b-col>
                   </b-row>
                 </template>
                 <b-form-input
                   v-model="keyword"
-                  placeholder="Search name"
+                  placeholder="Search"
                 ></b-form-input>
+                <b-form-group class="my-1" label="" v-slot="{ ariaDescribedby }">
+                    <b-form-radio-group
+                        id="radio-group-1"
+                        v-model="selected_field"
+                        :options="searchable_fields"
+                        :aria-describedby="ariaDescribedby"
+                        name="radio-options"
+                    ></b-form-radio-group>
+                </b-form-group>
                 
                 <b-table
                   class="mt-3"
-                  id="table-schools"
+                  id="table-classes"
                   :fields="fields"
-                  :items="schools.data"
+                  :items="classes.data"
                   :per-page="perPage"
                   :current-page="currentPage"
                   :busy="isLoading"
@@ -59,7 +68,7 @@
                 <template #footer>
                   <b-row align-h="center">
                     <b-col cols="12" class="overflow-auto">
-                      <pagination :data="schools" @pagination-change-page="getSchools"></pagination>
+                      <pagination :data="classes" @pagination-change-page="getClasses"></pagination>
                     </b-col>
                   </b-row>
                 </template>
@@ -78,30 +87,39 @@ import api from "../util/baseApi";
 import {defaultHeaders} from "../util/constants";
 
 export default {
-  name: "Home",
+  name: "Classes",
   data() {
     return {
       keyword: null,
       isLoading: false,
       perPage: 0,
       currentPage: 0,
-      schools: {},
+      classes: {},
       fields: [
         {key: "id", label: "Cod"},
-        "name",
-        "address",
-        "neighborhood",
-        "number",
-        "zip",
-        "actions",
+        {key: "school.name", label: "School"},
+        {key: "level.description", label: "Educational Level"},
+        "serie",
+        "turn",
+        "year",
+        "actions"
       ],
+      selected_field: "id",
+      searchable_fields: [
+          {text: "Cod", value: "id"},
+          {text: "School", value: "school_id"},
+          {text: "Educational Level", value: "nivel_id"},
+          {text: "Serie", value: "serie"},
+          {text: "Turn", value: "turn"},
+          {text: "Year", value: "year"},
+      ]
     };
   },
   mounted(){
-    this.getSchools()
+    this.getClasses()
   },
   methods: {
-    getSchools(page = 1) {
+    getClasses(page = 1) {
       this.togglerLoading();
       
       const config = {
@@ -109,9 +127,9 @@ export default {
       }
       
       api
-        .get(`api/schools?page=${page}`, config)
+        .get(`api/classes?page=${page}`, config)
         .then((response) => {
-          this.schools = response.data;
+          this.classes = response.data;
           this.togglerLoading();
         })
         .catch(() => {
@@ -127,11 +145,16 @@ export default {
       const config = {
         headers: defaultHeaders(),
       };
+
+      const params = {
+          keyword: this.keyword, 
+          filter: this.selected_field
+        }
       
       api
-        .post(`api/schools/search`, {keyword: this.keyword}, config)
+        .post(`api/classes/search`, params, config)
         .then((response) => {
-          this.schools = response.data;
+          this.classes = response.data;
           this.togglerLoading();
         })
         .catch(() => {
@@ -147,7 +170,7 @@ export default {
   },
   computed: {
     rows() {
-      return this.schools.length;
+      return this.classes.length;
     },
   },
   watch: {

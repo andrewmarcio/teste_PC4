@@ -17,9 +17,9 @@ class SchoolController extends Controller
      */
     public function search(Request $request)
     {
-        $query = School::query();
-        $query->where("name", "LIKE", "%".$request->input("search")."%");
+        $query = School::where("name", "LIKE", "%".$request->input("keyword")."%");
         return $query->paginate(10);
+        // return $query->paginate(10);
     }
 
     /**
@@ -40,7 +40,7 @@ class SchoolController extends Controller
      */
     public function store(SchoolRequest $request)
     {
-        Student::create($request->all());
+        School::create($request->all());
 
         return response()->json(["message" => "Added School Successfully."], 200);
     }

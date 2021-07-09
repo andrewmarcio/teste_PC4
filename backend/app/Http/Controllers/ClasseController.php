@@ -4,10 +4,48 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ClasseRequest;
 use App\Models\Classe;
+use App\Models\EducationalLevel;
+use App\Models\School;
 use Illuminate\Http\Request;
 
 class ClasseController extends Controller
 {
+
+    public function search(Request $request)
+    {
+        $query = Classe::query();
+        $filter = $request->input("filter");
+        $text = $request->input("keyword");
+
+        if(!empty($filter)){
+            switch($filter){
+                case "school_id":
+                    $query->whereHas("school", function($query) use ($text){
+                        $query->where("name", "LIKE", "%".$text."%");
+                    });
+                break;
+                case "nivel_id":
+                    $query->whereHas("level", function($query) use ($text){
+                        $query->where("description", "LIKE", "%".$text."%");
+                    });
+                break;
+                default :
+                    $query->where($filter, "LIKE", "%".$text."%");
+                break;
+            }
+        }
+
+        return $query->paginate(10);
+    }
+
+    public function create()
+    {
+        return [
+            "schools" => School::all(),
+            "levels" => EducationalLevel::all()
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      *

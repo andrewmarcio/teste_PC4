@@ -17,9 +17,9 @@ class CreateSchoolsTable extends Migration
             $table->id();
             $table->string("name");
             $table->string("address");
-            $table->string("neighborhood");
-            $table->string("number");
-            $table->string("zip");
+            $table->string("neighborhood")->nullable();
+            $table->string("number")->nullable();
+            $table->string("zip")->nullable();
             $table->timestamps();
         });
     }

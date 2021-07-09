@@ -17,7 +17,7 @@ class Classe extends Model
         "turn"
     ];
 
-    protected $with = ["level"];
+    protected $with = ["level", "school"];
 
     public function students()
     {

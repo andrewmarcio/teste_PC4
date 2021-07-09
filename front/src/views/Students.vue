@@ -10,23 +10,32 @@
                 <template #header>
                   <b-row>
                     <b-col>
-                      <h3 class="mb-0 ml-3 text-left">Schools</h3>
+                      <h3 class="mb-0 ml-3 text-left">Students</h3>
                     </b-col>
                     <b-col class="text-right">
-                      <b-button to="/school/create"> <font-awesome-icon icon="plus" /> Add School</b-button>
+                      <b-button> <font-awesome-icon icon="plus" /> Add Student</b-button>
                     </b-col>
                   </b-row>
                 </template>
                 <b-form-input
                   v-model="keyword"
-                  placeholder="Search name"
+                  placeholder="Search"
                 ></b-form-input>
+                <b-form-group class="my-1" label="" v-slot="{ ariaDescribedby }">
+                    <b-form-radio-group
+                        id="radio-group-1"
+                        v-model="selected_field"
+                        :options="searchable_fields"
+                        :aria-describedby="ariaDescribedby"
+                        name="radio-options"
+                    ></b-form-radio-group>
+                </b-form-group>
                 
                 <b-table
                   class="mt-3"
-                  id="table-schools"
+                  id="table-students"
                   :fields="fields"
-                  :items="schools.data"
+                  :items="students.data"
                   :per-page="perPage"
                   :current-page="currentPage"
                   :busy="isLoading"
@@ -59,7 +68,7 @@
                 <template #footer>
                   <b-row align-h="center">
                     <b-col cols="12" class="overflow-auto">
-                      <pagination :data="schools" @pagination-change-page="getSchools"></pagination>
+                      <pagination :data="students" @pagination-change-page="getStudents"></pagination>
                     </b-col>
                   </b-row>
                 </template>
@@ -78,30 +87,37 @@ import api from "../util/baseApi";
 import {defaultHeaders} from "../util/constants";
 
 export default {
-  name: "Home",
+  name: "Students",
   data() {
     return {
       keyword: null,
       isLoading: false,
       perPage: 0,
       currentPage: 0,
-      schools: {},
+      students: {},
       fields: [
         {key: "id", label: "Cod"},
-        "name",
-        "address",
-        "neighborhood",
-        "number",
-        "zip",
-        "actions",
+        {key: "name", label: "Name"},
+        {key: "email", label: "Email"},
+        "phone",
+        "gender",
+        "actions"
       ],
+      selected_field: "id",
+      searchable_fields: [
+          {text: "Cod", value: "id"},
+          {text: "Name", value: "name"},
+          {text: "Email", value: "email"},
+          {text: "Phone", value: "phone"},
+          {text: "Gender", value: "gender"},
+      ]
     };
   },
   mounted(){
-    this.getSchools()
+    this.getStudents()
   },
   methods: {
-    getSchools(page = 1) {
+    getStudents(page = 1) {
       this.togglerLoading();
       
       const config = {
@@ -109,9 +125,9 @@ export default {
       }
       
       api
-        .get(`api/schools?page=${page}`, config)
+        .get(`api/students?page=${page}`, config)
         .then((response) => {
-          this.schools = response.data;
+          this.students = response.data;
           this.togglerLoading();
         })
         .catch(() => {
@@ -127,11 +143,16 @@ export default {
       const config = {
         headers: defaultHeaders(),
       };
+
+      const params = {
+          keyword: this.keyword, 
+          filter: this.selected_field
+        }
       
       api
-        .post(`api/schools/search`, {keyword: this.keyword}, config)
+        .post(`api/students/search`, params, config)
         .then((response) => {
-          this.schools = response.data;
+          this.students = response.data;
           this.togglerLoading();
         })
         .catch(() => {
@@ -147,7 +168,7 @@ export default {
   },
   computed: {
     rows() {
-      return this.schools.length;
+      return this.students.length;
     },
   },
   watch: {
